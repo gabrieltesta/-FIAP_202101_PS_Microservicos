@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <title>Empresas</title>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body sec:authorize="isAuthenticated()">
+
+<nav class="navbar navbar-expand-lg navbar-light py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/welcome">PS13SI</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link active" href="/companies">Empresas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact">Fale Conosco</a></li>
+            </ul>
+        </div>
+        <form id="logoutForm" method="POST" th:action="@{/logout}">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        <a style="margin-left: 40px; font-size: 14.4px !important" class="navbar-brand" href="#">Olá, <span sec:authentication="name"></span> | <a onclick="document.forms['logoutForm'].submit()" style="cursor:pointer; font-size: 14.4px !important">Logout</a></a>
+    </div>
+</nav>
+<div style="width: 100%;display: flex;
+    margin-top: 40px;">
+    <a style="margin:auto;" href="/create-company" class="btn btn-lg btn-primary btn-block">Criar uma nova empresa</a>
+</div>
+<table style="width: 90%;
+    margin: auto;
+    margin-top: 40px;" class="table" th:switch="${companies}">
+    <thead>
+    <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Telefone</th>
+        <th scope="col">Opções</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="company : ${companies}">
+        <th scope="row" th:text="${company.name}"></th>
+        <td th:text="${company.email}"></td>
+        <td th:text="${company.telephone}"></td>
+        <td><a class="btn btn-sm btn-warning" th:href="@{/update-company/{id}(id=${company.id})}">Editar</a><a class="btn btn-sm btn-danger" th:href="@{/delete-company/{id}(id=${company.id})}">Excluir</a></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
